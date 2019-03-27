@@ -36,7 +36,7 @@ public class ClienteRestController {
             cliente = clienteService.findById(id);
 
         }catch (DataAccessException e){
-            response.put("mensaje", "Error al realiar la consulta en la base de datos ");
+            response.put("mensaje", "Error al realizar la consulta en la base de datos ");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -87,7 +87,7 @@ public class ClienteRestController {
 
             clienteUpdated= clienteService.save(clienteActual);
         }catch (DataAccessException e){
-            response.put("mensaje", "Error al actulizar el cliente en la base de datos");
+            response.put("mensaje", "Error al actualizar el cliente en la base de datos");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
