@@ -43,7 +43,7 @@ public class ClienteRestController {
 
 
         if (cliente == null ){
-            response.put("mensaje", "El cliente ID: ".concat(id.toString().concat(" no exste en la base de datos!")));
+            response.put("mensaje", "El cliente ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
         }
 
@@ -51,7 +51,6 @@ public class ClienteRestController {
     }
 
     @PostMapping("/clientes")
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> create(@RequestBody Cliente cliente) {
         Cliente cliente1 = null;
         Map<String, Object> response = new HashMap<>();
