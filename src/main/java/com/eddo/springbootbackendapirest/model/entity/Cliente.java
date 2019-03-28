@@ -24,7 +24,7 @@ public class Cliente implements Serializable {
     private String apellido;
 
     @NotEmpty(message = "no puede estar vacio")
-    @Email(message = "no es una dirección de correo valida")
+    @Email(message = "no tiene una dirección de correo valida")
     @Column(nullable = false, unique = true)
     private String email;
 
