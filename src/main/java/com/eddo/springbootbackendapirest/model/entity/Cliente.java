@@ -3,6 +3,7 @@ package com.eddo.springbootbackendapirest.model.entity;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
@@ -25,14 +26,16 @@ public class Cliente implements Serializable {
 
     @NotEmpty(message = "no puede estar vacio")
     @Email(message = "no tiene una dirección de correo valida")
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = false)
     private String email;
 
+    @NotNull(message = "no puede estar vacio")
     @Column(name = "create_at")
     @Temporal(TemporalType.DATE)
     private Date createAt;
 
-    @PrePersist
+
+//    @PrePersist
     public void prePersis(){
         createAt = new Date();
     }
