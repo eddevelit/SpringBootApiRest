@@ -2,6 +2,8 @@ package com.eddo.springbootbackendapirest.controller;
 
 import com.eddo.springbootbackendapirest.model.entity.Cliente;
 import com.eddo.springbootbackendapirest.model.service.IClienteService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -13,7 +15,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,6 +35,8 @@ public class ClienteRestController {
 
     @Autowired
     private IClienteService clienteService;
+
+    private final Logger log = LoggerFactory.getLogger(ClienteRestController.class);
 
     @GetMapping("/clientes")
     public List<Cliente> index() {
@@ -175,6 +178,9 @@ public class ClienteRestController {
         if (!archivo.isEmpty()){
             String nombreArchivo = UUID.randomUUID().toString() + "_" +archivo.getOriginalFilename().replace(" ", "");
             Path rutaArchivo = Paths.get("/Users/Eddo/Documents/uploads").resolve(nombreArchivo).toAbsolutePath();
+
+            log.info(rutaArchivo.toString());
+
             try {
                 Files.copy(archivo.getInputStream(), rutaArchivo);
             } catch (IOException e) {
@@ -209,6 +215,7 @@ public class ClienteRestController {
      public ResponseEntity<Resource> verFoto(@PathVariable String nombreFoto){
 
          Path rutaArchivo = Paths.get("/Users/Eddo/Documents/uploads").resolve(nombreFoto).toAbsolutePath();
+         log.info(rutaArchivo.toString());
          Resource recurso = null;
 
          try {
