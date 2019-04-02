@@ -19,10 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = {"http://localhost:4200"})
@@ -159,7 +156,7 @@ public class ClienteRestController {
         Cliente cliente = clienteService.findById(id);
 
         if (!archivo.isEmpty()){
-            String nombreArchivo = archivo.getOriginalFilename();
+            String nombreArchivo = UUID.randomUUID().toString() + "_" +archivo.getOriginalFilename().replace(" ", "");
             Path rutaArchivo = Paths.get("/Users/Eddo/Documents/uploads").resolve(nombreArchivo).toAbsolutePath();
             try {
                 Files.copy(archivo.getInputStream(), rutaArchivo);
