@@ -76,6 +76,7 @@ public class ClienteRestController {
 
     @PostMapping("/clientes")
     public ResponseEntity<?> create(@Valid @RequestBody Cliente cliente, BindingResult result) {
+
         Cliente cliente1 = null;
         Map<String, Object> response = new HashMap<>();
 
@@ -96,8 +97,10 @@ public class ClienteRestController {
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
         response.put("mensaje", "El cliente ha sido creado con éxito");
         response.put("cliente", cliente1);
+
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -139,17 +142,16 @@ public class ClienteRestController {
         response.put("cliente", clienteUpdated);
 
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+
     }
 
     @DeleteMapping("/clientes/{id}")
      public ResponseEntity<?> delete(@PathVariable Long id){
 
         Map<String, Object> response = new HashMap<>();
-
         try{
             Cliente cliente = clienteService.findById(id);
             String nombreFotoAnterior = cliente.getFoto();
-
             if (nombreFotoAnterior != null && nombreFotoAnterior.length()>0){
                 Path rutaFotoAnterior = Paths.get("/Users/Eddo/Documents/uploads").resolve(nombreFotoAnterior).toAbsolutePath();
                 File archivoFotoAnterior = rutaFotoAnterior.toFile();
@@ -157,15 +159,12 @@ public class ClienteRestController {
                     archivoFotoAnterior.delete();
                 }
             }
-
-
             clienteService.delete(id);
         }catch (DataAccessException e){
             response.put("mensaje", "Error al eliminar el cliente de la base de datos");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
         response.put("mensaje", "El cliente ha sido elimiando con exito");
         return new ResponseEntity<>(response, HttpStatus.OK);
      }
@@ -178,9 +177,7 @@ public class ClienteRestController {
         if (!archivo.isEmpty()){
             String nombreArchivo = UUID.randomUUID().toString() + "_" +archivo.getOriginalFilename().replace(" ", "");
             Path rutaArchivo = Paths.get("/Users/Eddo/Documents/uploads").resolve(nombreArchivo).toAbsolutePath();
-
             log.info(rutaArchivo.toString());
-
             try {
                 Files.copy(archivo.getInputStream(), rutaArchivo);
             } catch (IOException e) {
@@ -188,7 +185,6 @@ public class ClienteRestController {
                 response.put("error", e.getMessage().concat(": ").concat(e.getCause().getMessage()));
                 return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
             }
-
             String nombreFotoAnterior = cliente.getFoto();
             if (nombreFotoAnterior != null && nombreFotoAnterior.length()>0){
                 Path rutaFotoAnterior = Paths.get("/Users/Eddo/Documents/uploads").resolve(nombreFotoAnterior).toAbsolutePath();
@@ -197,13 +193,11 @@ public class ClienteRestController {
                     archivoFotoAnterior.delete();
                 }
             }
-
-
             cliente.setFoto(nombreArchivo);
             clienteService.save(cliente);
-
             response.put("cliente", cliente);
             response.put("mensaje", "Has subido correctamente la imagen: " + nombreArchivo);
+
         }
 
 
@@ -217,23 +211,22 @@ public class ClienteRestController {
          Path rutaArchivo = Paths.get("/Users/Eddo/Documents/uploads").resolve(nombreFoto).toAbsolutePath();
          log.info(rutaArchivo.toString());
          Resource recurso = null;
-
          try {
              recurso = new UrlResource(rutaArchivo.toUri());
          }catch (MalformedURLException e){
              e.printStackTrace();
          }
-
          if (!recurso.exists() && !recurso.isReadable()){
-             throw new RuntimeException("Error no se pudo cargar la imaen: " + nombreFoto);
+             rutaArchivo = Paths.get( "src/main/resources/static/images").resolve("iconfinder_ic_not_interested_48px_352568.png").toAbsolutePath();
+             try {
+                 recurso = new UrlResource(rutaArchivo.toUri());
+             }catch (MalformedURLException e){
+                 e.printStackTrace();
+             }
+             log.error("Error no se pudo cargar la imagen: " + nombreFoto);
          }
-
          HttpHeaders cabecera = new HttpHeaders();
          cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename()+ "\"");
-
-
-
-
          return new ResponseEntity<Resource>(recurso, cabecera ,HttpStatus.OK);
 
      }
