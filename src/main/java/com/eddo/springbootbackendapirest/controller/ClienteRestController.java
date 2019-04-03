@@ -2,6 +2,7 @@ package com.eddo.springbootbackendapirest.controller;
 
 import com.eddo.springbootbackendapirest.model.entity.Cliente;
 import com.eddo.springbootbackendapirest.model.service.IClienteService;
+import com.eddo.springbootbackendapirest.model.service.IUploadFileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,9 @@ public class ClienteRestController {
 
     @Autowired
     private IClienteService clienteService;
+
+    @Autowired
+    private IUploadFileService uploadFileService;
 
     private final Logger log = LoggerFactory.getLogger(ClienteRestController.class);
 
@@ -152,13 +156,9 @@ public class ClienteRestController {
         try{
             Cliente cliente = clienteService.findById(id);
             String nombreFotoAnterior = cliente.getFoto();
-            if (nombreFotoAnterior != null && nombreFotoAnterior.length()>0){
-                Path rutaFotoAnterior = Paths.get("/Users/Eddo/Documents/uploads").resolve(nombreFotoAnterior).toAbsolutePath();
-                File archivoFotoAnterior = rutaFotoAnterior.toFile();
-                if (archivoFotoAnterior.exists() && archivoFotoAnterior.canRead()){
-                    archivoFotoAnterior.delete();
-                }
-            }
+
+            uploadFileService.eliminar(nombreFotoAnterior);
+
             clienteService.delete(id);
         }catch (DataAccessException e){
             response.put("mensaje", "Error al eliminar el cliente de la base de datos");
@@ -175,26 +175,18 @@ public class ClienteRestController {
         Cliente cliente = clienteService.findById(id);
 
         if (!archivo.isEmpty()){
-            String nombreArchivo = UUID.randomUUID().toString() + "_" +archivo.getOriginalFilename().replace(" ", "");
-            Path rutaArchivo = Paths.get("/Users/Eddo/Documents/uploads").resolve(nombreArchivo).toAbsolutePath();
-
-            log.info(rutaArchivo.toString());
-
+            String nombreArchivo = null;
             try {
-                Files.copy(archivo.getInputStream(), rutaArchivo);
+                nombreArchivo = uploadFileService.copiar(archivo);
             } catch (IOException e) {
-                response.put("mensaje", "Error al subir la imagen" + nombreArchivo);
+                response.put("mensaje", "Error al subir la imagen");
                 response.put("error", e.getMessage().concat(": ").concat(e.getCause().getMessage()));
                 return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
             }
             String nombreFotoAnterior = cliente.getFoto();
-            if (nombreFotoAnterior != null && nombreFotoAnterior.length()>0){
-                Path rutaFotoAnterior = Paths.get("/Users/Eddo/Documents/uploads").resolve(nombreFotoAnterior).toAbsolutePath();
-                File archivoFotoAnterior = rutaFotoAnterior.toFile();
-                if (archivoFotoAnterior.exists() && archivoFotoAnterior.canRead()){
-                    archivoFotoAnterior.delete();
-                }
-            }
+
+            uploadFileService.eliminar(nombreFotoAnterior);
+
             cliente.setFoto(nombreArchivo);
             clienteService.save(cliente);
             response.put("cliente", cliente);
@@ -210,23 +202,15 @@ public class ClienteRestController {
      @GetMapping("/uploads/img/{nombreFoto:.+}")
      public ResponseEntity<Resource> verFoto(@PathVariable String nombreFoto){
 
-         Path rutaArchivo = Paths.get("/Users/Eddo/Documents/uploads").resolve(nombreFoto).toAbsolutePath();
-         log.info(rutaArchivo.toString());
+
          Resource recurso = null;
+
          try {
-             recurso = new UrlResource(rutaArchivo.toUri());
-         }catch (MalformedURLException e){
+             recurso = uploadFileService.cargar(nombreFoto);
+         } catch (MalformedURLException e) {
              e.printStackTrace();
          }
-         if (!recurso.exists() && !recurso.isReadable()){
-             rutaArchivo = Paths.get( "src/main/resources/static/images").resolve("iconfinder_ic_not_interested_48px_352568.png").toAbsolutePath();
-             try {
-                 recurso = new UrlResource(rutaArchivo.toUri());
-             }catch (MalformedURLException e){
-                 e.printStackTrace();
-             }
-             log.error("Error no se pudo cargar la imagen: " + nombreFoto);
-         }
+
          HttpHeaders cabecera = new HttpHeaders();
          cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename()+ "\"");
          return new ResponseEntity<Resource>(recurso, cabecera ,HttpStatus.OK);
