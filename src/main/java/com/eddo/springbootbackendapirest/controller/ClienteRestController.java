@@ -177,7 +177,9 @@ public class ClienteRestController {
         if (!archivo.isEmpty()){
             String nombreArchivo = UUID.randomUUID().toString() + "_" +archivo.getOriginalFilename().replace(" ", "");
             Path rutaArchivo = Paths.get("/Users/Eddo/Documents/uploads").resolve(nombreArchivo).toAbsolutePath();
+
             log.info(rutaArchivo.toString());
+
             try {
                 Files.copy(archivo.getInputStream(), rutaArchivo);
             } catch (IOException e) {
