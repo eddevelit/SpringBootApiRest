@@ -1,6 +1,7 @@
 package com.eddo.springbootbackendapirest.controller;
 
 import com.eddo.springbootbackendapirest.model.entity.Cliente;
+import com.eddo.springbootbackendapirest.model.entity.Region;
 import com.eddo.springbootbackendapirest.model.service.IClienteService;
 import com.eddo.springbootbackendapirest.model.service.IUploadFileService;
 import org.slf4j.Logger;
@@ -134,6 +135,7 @@ public class ClienteRestController {
             clienteActual.setNombre(cliente.getNombre());
             clienteActual.setEmail(cliente.getEmail());
             clienteActual.setCreateAt(cliente.getCreateAt());
+            clienteActual.setRegion(cliente.getRegion());
 
             clienteUpdated= clienteService.save(clienteActual);
         }catch (DataAccessException e){
@@ -215,5 +217,10 @@ public class ClienteRestController {
          cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename()+ "\"");
          return new ResponseEntity<Resource>(recurso, cabecera ,HttpStatus.OK);
 
+     }
+
+     @GetMapping("/clientes/regiones")
+     public List<Region> listarRegiones(){
+        return clienteService.findAllRegiones();
      }
 }

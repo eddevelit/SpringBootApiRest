@@ -2,6 +2,7 @@ package com.eddo.springbootbackendapirest.model.service;
 
 import com.eddo.springbootbackendapirest.model.dao.IclienteDao;
 import com.eddo.springbootbackendapirest.model.entity.Cliente;
+import com.eddo.springbootbackendapirest.model.entity.Region;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,5 +44,11 @@ public class ClienteServiceImpl implements IClienteService {
     @Transactional
     public void delete(Long id) {
         clienteDao.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public List<Region> findAllRegiones() {
+        return clienteDao.findAllRegiones();
     }
 }

@@ -1,6 +1,7 @@
 package com.eddo.springbootbackendapirest.model.service;
 
 import com.eddo.springbootbackendapirest.model.entity.Cliente;
+import com.eddo.springbootbackendapirest.model.entity.Region;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -17,5 +18,7 @@ public interface IClienteService {
     Cliente save(Cliente cliente);
 
     void delete(Long id);
+
+    public List<Region> findAllRegiones();
 
 }
