@@ -32,4 +32,4 @@ INSERT INTO roles (nombre) values ('ROLE_ADMIN');
 
 INSERT INTO usuarios_roles (usuario_id, roles_id) VALUES (1,1);
 INSERT INTO usuarios_roles (usuario_id, roles_id) VALUES (2,2);
-INSERT INTO usuarios_roles (usuario_id, roles_id) VALUES (2,1);
+INSERT INTO usuarios_roles (usuario_id, roles_id) VALUES (3,2);
