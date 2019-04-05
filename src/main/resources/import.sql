@@ -22,9 +22,9 @@ INSERT INTO clientes (region_id, nombre, apellido, email, create_at) VALUES (5,'
 INSERT INTO clientes (region_id, nombre, apellido, email, create_at) VALUES (8,'Luis', 'Ruiz', 'quirozstorm@gmail.com', '2019-05-29');
 
 /* Creamos algunos usuarios con sus roles */
-INSERT INTO usuarios (username, password, enabled) VALUES ('andres','$2a$10$CQTYgcl56SJ.DWOddS2g1Ocze10E3sHksvvU7XkfYYkRKbOwMiHUW',1);
-INSERT INTO usuarios (username, password, enabled) VALUES ('admin','$2a$10$9ol.nBJ1WwoCKVOslqwOfeSRxTWFl6lLxZRS9xhD.HjuttaoKEsfi',1);
-INSERT INTO usuarios (username, password, enabled) VALUES ('eddevelit','$2a$10$mEjs3VWtptWx593kZAaTUOJSwBxX56psT4x.C9QzziB7VH/rzELOG',1);
+INSERT INTO usuarios (username, password, enabled, nombre, apellido, email) VALUES ('andres','$2a$10$CQTYgcl56SJ.DWOddS2g1Ocze10E3sHksvvU7XkfYYkRKbOwMiHUW',1,'Andres','Guzman','profesor@gmail.com');
+INSERT INTO usuarios (username, password, enabled, nombre, apellido, email) VALUES ('admin','$2a$10$9ol.nBJ1WwoCKVOslqwOfeSRxTWFl6lLxZRS9xhD.HjuttaoKEsfi',1,'Luis','Ruiz','luis@gmail.com');
+INSERT INTO usuarios (username, password, enabled, nombre, apellido, email) VALUES ('eddevelit','$2a$10$mEjs3VWtptWx593kZAaTUOJSwBxX56psT4x.C9QzziB7VH/rzELOG',1,'Eduardo','Ocampo','edd.develit@gmail.com');
 
 
 INSERT INTO roles (nombre) values ('ROLE_USER');

@@ -18,6 +18,13 @@ public class Usuario implements Serializable {
     @Column(unique = true, length = 60)
     private String password;
 
+
+    private String nombre;
+    private String apellido;
+
+    @Column(unique = true)
+    private String email;
+
     private Boolean enabled;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -54,6 +61,30 @@ public class Usuario implements Serializable {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public List<Role> getRoles() {
