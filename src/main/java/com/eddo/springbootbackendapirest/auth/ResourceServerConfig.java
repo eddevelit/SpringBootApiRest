@@ -1,6 +1,7 @@
 package com.eddo.springbootbackendapirest.auth;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpMethod;
@@ -29,6 +30,7 @@ public class ResourceServerConfig  extends ResourceServerConfigurerAdapter {
         .and().cors().configurationSource(corsConfigurationSource());
     }
 
+    @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
@@ -42,6 +44,7 @@ public class ResourceServerConfig  extends ResourceServerConfigurerAdapter {
         return source;
     }
 
+    @Bean
     public FilterRegistrationBean<CorsFilter> corsFilter(){
         FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<CorsFilter>(new CorsFilter(corsConfigurationSource()));
         bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
